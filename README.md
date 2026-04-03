@@ -50,10 +50,10 @@ Designed with modular architecture and reusable components for maintainability a
 ## 📦 Download Builds
 
 ### 📱 Android APK
-👉 https://github.com/ramanzenith/Simplist-To-Do-app/releases/download/v1.0.0/Simplist.To-Do.App.apk  
+👉 https://github.com/ramanexc/Simplist-To-Do-app/releases/download/v1.0.0/Simplist.To-Do.App.apk  
 
 ### 🖥 Windows Version
-👉 https://github.com/ramanzenith/Simplist-To-Do-app/releases/download/v1.0.0/Simplist.To-Do.App.zip  
+👉 https://github.com/ramanexc/Simplist-To-Do-app/releases/download/v1.0.0/Simplist.To-Do.App.zip  
 
 > Extract the ZIP file and run the `.exe`.
 
