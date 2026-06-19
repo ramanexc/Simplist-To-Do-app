@@ -10,12 +10,43 @@ class Tododatabase {
     items = [];
   }
 
-  void loaddata() {
+  Future<void> loaddata() async {
     try {
       items = _mybox.values.toList();
     } catch (e) {
       _mybox.clear();
       items = [];
+    }
+
+    // Handle first-run placeholder tasks
+    var settingsBox = Hive.box('settings');
+    bool isFirstRun = settingsBox.get('isFirstRun', defaultValue: true);
+
+    if (isFirstRun) {
+      await saveTask(Task(
+        name: 'Welcome to Simplist! 👋',
+        isCompleted: false,
+        category: 'Personal',
+        priority: 2, // High priority
+        orderIndex: 0.0,
+      ));
+      await saveTask(Task(
+        name: 'Swipe left to edit or delete me',
+        isCompleted: false,
+        category: 'General',
+        priority: 1, // Medium priority
+        orderIndex: 1.0,
+      ));
+      await saveTask(Task(
+        name: 'Tap the + button to add a new task',
+        isCompleted: false,
+        category: 'General',
+        priority: 0, // Low priority
+        orderIndex: 2.0,
+      ));
+
+      await settingsBox.put('isFirstRun', false);
+      items = _mybox.values.toList();
     }
   }
 

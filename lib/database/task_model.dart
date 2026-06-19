@@ -16,11 +16,27 @@ class Task extends HiveObject {
   @HiveField(3)
   DateTime? dueDate;
 
+  @HiveField(4)
+  String category;
+
+  @HiveField(5)
+  int priority; // 0: Low, 1: Medium, 2: High
+
+  @HiveField(6)
+  String recurring; // 'none', 'daily', 'weekly', 'monthly'
+
+  @HiveField(7)
+  double orderIndex;
+
   Task({
     this.id,
     required this.name,
     this.isCompleted = false,
     this.dueDate,
+    this.category = 'General',
+    this.priority = 1,
+    this.recurring = 'none',
+    this.orderIndex = 0.0,
   });
 
   // Helper method to update Hive key based ID
@@ -38,6 +54,10 @@ class Task extends HiveObject {
       'name': name,
       'isCompleted': isCompleted,
       'dueDate': dueDate?.toIso8601String(),
+      'category': category,
+      'priority': priority,
+      'recurring': recurring,
+      'orderIndex': orderIndex,
     };
   }
 
@@ -48,6 +68,10 @@ class Task extends HiveObject {
       name: map['name'] ?? '',
       isCompleted: map['isCompleted'] ?? false,
       dueDate: map['dueDate'] != null ? DateTime.parse(map['dueDate']) : null,
+      category: map['category'] ?? 'General',
+      priority: map['priority'] ?? 1,
+      recurring: map['recurring'] ?? 'none',
+      orderIndex: (map['orderIndex'] ?? 0.0).toDouble(),
     );
   }
 }
