@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "972214616753",
+    "project_id": "simplist-88038",
+    "storage_bucket": "simplist-88038.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:972214616753:android:b39cf8ef304b1b8a705890",
+        "android_client_info": {
+          "package_name": "com.example.practice5"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBK84q9h5FJo9-G3vXxNmKMkCCInoitsao"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:972214616753:android:27879ee58344113a705890",
+        "android_client_info": {
+          "package_name": "com.example.simplist"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBK84q9h5FJo9-G3vXxNmKMkCCInoitsao"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
