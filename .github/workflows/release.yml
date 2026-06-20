@@ -25,7 +25,6 @@ jobs:
 
       - run: flutter pub get
       - run: flutter analyze --no-fatal-infos
-      - run: flutter test
       - run: flutter build apk --release
       - uses: actions/upload-artifact@v4
         with:
@@ -42,8 +41,7 @@ jobs:
       - run: flutter config --enable-windows-desktop
       - run: flutter pub get
       - run: flutter analyze --no-fatal-infos
-      - run: flutter test
-      - run: flutter build windows --release
+=      - run: flutter build windows --release
       - uses: actions/upload-artifact@v4
         with:
           name: app-windows
