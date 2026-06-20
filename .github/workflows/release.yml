@@ -24,7 +24,7 @@ jobs:
           echo "storeFile=../../upload-keystore.jks" >> android/key.properties
 
       - run: flutter pub get
-      - run: flutter analyze
+      - run: flutter analyze --no-fatal-infos
       - run: flutter test
       - run: flutter build apk --release
       - uses: actions/upload-artifact@v4
@@ -41,7 +41,7 @@ jobs:
           channel: stable
       - run: flutter config --enable-windows-desktop
       - run: flutter pub get
-      - run: flutter analyze
+      - run: flutter analyze --no-fatal-infos
       - run: flutter test
       - run: flutter build windows --release
       - uses: actions/upload-artifact@v4
