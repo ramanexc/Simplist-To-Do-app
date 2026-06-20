@@ -39,6 +39,10 @@ jobs:
         with:
           channel: stable
       - run: flutter config --enable-windows-desktop
+
+      - name: Allow older CMake projects
+        run: echo "CMAKE_POLICY_VERSION_MINIMUM=3.5" >> $env:GITHUB_ENV
+
       - run: flutter pub get
       - run: flutter analyze --no-fatal-infos
       - run: flutter build windows --release
