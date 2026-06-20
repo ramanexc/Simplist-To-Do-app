@@ -39,6 +39,17 @@ Designed with a modular architecture and reusable components, Simplist is built 
 
 ---
 
+## 🆕 What's New in v2.0.0
+
+- **UI/UX Revamp**: A completely redesigned app flow including tiles, main page, and add new item screens.
+- **Firebase Integration**: Replaced the local architecture with Cloud Firestore and Firebase Authentication.
+- **Improved Storage**: Switched to Hive for lightning-fast local caching and offline capabilities.
+- **Notifications**: Introduced local timezone-aware notifications for task reminders.
+- **CI/CD Workflow**: Configured GitHub Actions to automatically build and release Android (APK) and Windows binaries on pushes to the `main` branch.
+- **Polish**: Added native splash screens and a new rounded app icon.
+
+---
+
 ## 🛠 Tech Stack
 
 - **Framework:** Flutter & Dart
@@ -52,10 +63,10 @@ Designed with a modular architecture and reusable components, Simplist is built 
 ## 📦 Download Builds
 
 ### 📱 Android APK
-👉 https://github.com/ramanexc/Simplist-To-Do-app/releases/download/v1.0.0/Simplist.To-Do.App.apk  
+👉 https://github.com/ramanexc/Simplist-To-Do-app/releases/latest/download/app-release.apk
 
 ### 🖥 Windows Version
-👉 https://github.com/ramanexc/Simplist-To-Do-app/releases/download/v1.0.0/Simplist.To-Do.App.zip  
+👉 https://github.com/ramanexc/Simplist-To-Do-app/releases/latest/download/app-windows.zip  
 
 > Extract the ZIP file and run the `.exe`.
 

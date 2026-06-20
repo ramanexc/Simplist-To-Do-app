@@ -3,6 +3,11 @@ name: Build and Release
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - '**.md'
+      - '.gitignore'
+      - 'LICENSE'
+      - '**.html'
 
 jobs:
   build-apk:
@@ -69,7 +74,7 @@ jobs:
         run: cd windows && zip -r ../app-windows.zip . && cd ..
       - uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.0.${{ github.run_number }}
+          tag_name: v2.0.${{ github.run_number }}
           files: |
             apk/app-release.apk
             app-windows.zip
