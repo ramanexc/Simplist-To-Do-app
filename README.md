@@ -63,10 +63,10 @@ Designed with a modular architecture and reusable components, Simplist is built 
 ## 📦 Download Builds
 
 ### 📱 Android APK
-👉 https://github.com/ramanexc/Simplist-To-Do-app/releases/latest/download/app-release.apk
+👉 https://github.com/ramanexc/Simplist-To-Do-app/releases/download/v2.0.0/simplist-v2.0.0.apk
 
 ### 🖥 Windows Version
-👉 https://github.com/ramanexc/Simplist-To-Do-app/releases/latest/download/app-windows.zip  
+👉 https://github.com/ramanexc/Simplist-To-Do-app/releases/download/v2.0.0/simplist-v2.0.0.zip  
 
 > Extract the ZIP file and run the `.exe`.
 
