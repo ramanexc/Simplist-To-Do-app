@@ -44,6 +44,8 @@ dependencies:
   timezone: ^0.9.4
   intl: ^0.20.2
   google_sign_in: ^6.2.1
+  local_notifier: ^0.1.6
+  desktop_webview_auth: ^0.0.16
 
 
 dev_dependencies:

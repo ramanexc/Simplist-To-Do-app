@@ -1,4 +1,7 @@
+import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:local_notifier/local_notifier.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
@@ -13,6 +16,8 @@ class NotificationService {
 
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
+      
+  final Map<int, Timer> _windowsTimers = {};
 
   Future<void> init() async {
     tz.initializeTimeZones();
@@ -25,13 +30,22 @@ class NotificationService {
       android: initializationSettingsAndroid,
     );
 
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+    if (!kIsWeb && defaultTargetPlatform == TargetPlatform.windows) {
+      await localNotifier.setup(
+        appName: 'Simplist',
+        shortcutPolicy: ShortcutPolicy.requireCreate,
+      );
+    } else {
+      await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+    }
 
     // Request permissions for Android 13+
-    final androidImplementation = flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
-    if (androidImplementation != null) {
-      await androidImplementation.requestNotificationsPermission();
-      await androidImplementation.requestExactAlarmsPermission();
+    if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
+      final androidImplementation = flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+      if (androidImplementation != null) {
+        await androidImplementation.requestNotificationsPermission();
+        await androidImplementation.requestExactAlarmsPermission();
+      }
     }
   }
 
@@ -51,34 +65,59 @@ class NotificationService {
 
     // Schedule exact due time notification
     if (dueDate.isAfter(DateTime.now())) {
-      await flutterLocalNotificationsPlugin.zonedSchedule(
-          id,
-          'Simplist',
-          '$taskName is due now',
-          tz.TZDateTime.from(dueDate, tz.local),
-          platformChannelSpecifics,
-          androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-          uiLocalNotificationDateInterpretation:
-              UILocalNotificationDateInterpretation.absoluteTime);
+      if (!kIsWeb && defaultTargetPlatform == TargetPlatform.windows) {
+        _windowsTimers[id]?.cancel();
+        _windowsTimers[id] = Timer(dueDate.difference(DateTime.now()), () {
+          LocalNotification(
+            title: 'Simplist',
+            body: '$taskName is due now',
+          ).show();
+        });
+      } else {
+        await flutterLocalNotificationsPlugin.zonedSchedule(
+            id,
+            'Simplist',
+            '$taskName is due now',
+            tz.TZDateTime.from(dueDate, tz.local),
+            platformChannelSpecifics,
+            androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+            uiLocalNotificationDateInterpretation:
+                UILocalNotificationDateInterpretation.absoluteTime);
+      }
     }
 
     // Schedule 30 minutes before notification
     final thirtyMinsBefore = dueDate.subtract(const Duration(minutes: 30));
     if (thirtyMinsBefore.isAfter(DateTime.now())) {
-      await flutterLocalNotificationsPlugin.zonedSchedule(
-          id + 100000, // Offset ID so it doesn't conflict with exact due time
-          'Simplist',
-          '$taskName is due in 30 minutes',
-          tz.TZDateTime.from(thirtyMinsBefore, tz.local),
-          platformChannelSpecifics,
-          androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-          uiLocalNotificationDateInterpretation:
-              UILocalNotificationDateInterpretation.absoluteTime);
+      if (!kIsWeb && defaultTargetPlatform == TargetPlatform.windows) {
+        _windowsTimers[id + 100000]?.cancel();
+        _windowsTimers[id + 100000] = Timer(thirtyMinsBefore.difference(DateTime.now()), () {
+          LocalNotification(
+            title: 'Simplist',
+            body: '$taskName is due in 30 minutes',
+          ).show();
+        });
+      } else {
+        await flutterLocalNotificationsPlugin.zonedSchedule(
+            id + 100000, // Offset ID so it doesn't conflict with exact due time
+            'Simplist',
+            '$taskName is due in 30 minutes',
+            tz.TZDateTime.from(thirtyMinsBefore, tz.local),
+            platformChannelSpecifics,
+            androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+            uiLocalNotificationDateInterpretation:
+                UILocalNotificationDateInterpretation.absoluteTime);
+      }
     }
   }
 
   Future<void> cancelNotification(int id) async {
-    await flutterLocalNotificationsPlugin.cancel(id);
-    await flutterLocalNotificationsPlugin.cancel(id + 100000);
+    if (!kIsWeb && defaultTargetPlatform == TargetPlatform.windows) {
+      _windowsTimers[id]?.cancel();
+      _windowsTimers[id + 100000]?.cancel();
+    } else {
+      await flutterLocalNotificationsPlugin.cancel(id);
+      await flutterLocalNotificationsPlugin.cancel(id + 100000);
+    }
   }
 }

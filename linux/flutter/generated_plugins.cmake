@@ -3,6 +3,8 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  desktop_webview_auth
+  local_notifier
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST

@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:desktop_webview_auth/desktop_webview_auth.dart';
+import 'package:desktop_webview_auth/google.dart';
 import '../database/task_model.dart';
 
 class FirestoreService {
@@ -23,14 +25,43 @@ class FirestoreService {
 
   Future<UserCredential?> signInWithGoogle() async {
     try {
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-      if (googleUser == null) return null;
+      OAuthCredential credential;
 
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-      final OAuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
+      if (!kIsWeb && defaultTargetPlatform == TargetPlatform.windows) {
+        // WINDOWS: Use desktop_webview_auth
+        // IMPORTANT: You must create a "Desktop app" OAuth Client ID in Google Cloud Console
+        // https://console.cloud.google.com/apis/credentials
+        const String desktopClientId = '972214616753-9e88sduibofrlh42i930fb3qfv0quqlf.apps.googleusercontent.com';
+        
+        if (desktopClientId.contains('YOUR_WINDOWS')) {
+          debugPrint("Please set your desktopClientId in firestore_service.dart to enable Windows Google Sign-In");
+          return null;
+        }
+
+        final args = GoogleSignInArgs(
+          clientId: desktopClientId,
+          redirectUri: 'http://localhost',
+          scope: 'email profile',
+        );
+        
+        final result = await DesktopWebviewAuth.signIn(args);
+        if (result == null) return null;
+
+        credential = GoogleAuthProvider.credential(
+          accessToken: result.accessToken,
+          idToken: result.idToken,
+        );
+      } else {
+        // ANDROID / IOS / WEB
+        final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+        if (googleUser == null) return null;
+
+        final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+        credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken,
+          idToken: googleAuth.idToken,
+        );
+      }
 
       if (_auth.currentUser != null && _auth.currentUser!.isAnonymous) {
         try {
